@@ -34,55 +34,31 @@ int Motive::init()
 	return errorCode;
 }
 
-int Motive::terminate()
-{
+int Motive::terminate() {
 	int errorCode = checkResult(TT_Shutdown());
+
 	errorCode = checkResult(TT_Shutdown());
+
 	m_initialized = false;
+
 	return 0;
 }
 
-int Motive::enableRigidBody(int index)
-{
-	if (m_initialized) {
-		TT_SetRigidBodyEnabled(index, true);
-		return 0;
-	}
-	return -1;
-}
-
-int Motive::disableRigidBody(int index)
-{
-	if (m_initialized) {
-		TT_SetRigidBodyEnabled(index, false);
-		return 0;
-	}
-	return -1;
-}
-
-bool Motive::isRigidBodyEnabled(int index)
-{
-	return TT_RigidBodyEnabled(index);
-}
-
-bool Motive::loadRigidBodies(std::string filename)
-{
-	if (TT_LoadRigidBodies(filename.c_str()) == NPRESULT_SUCCESS) {
+bool Motive::loadRigidBodies(std::string filename) {
+	if (TT_LoadTrackables(filename.c_str()) == NPRESULT_SUCCESS) {
 		return true;
 	}
 	return false;
 }
 
-bool Motive::removeRigidBody(int index)
-{
-	if(TT_RemoveRigidBody(index) == NPRESULT_SUCCESS) {
+bool Motive::removeRigidBody(int index) {
+	if(TT_RemoveTrackable(index) == NPRESULT_SUCCESS) {
 		return true;
 	}
 	return false;
 }
 
-double Motive::getTimeStamp() const
-{
+double Motive::getTimeStamp() const {
 	if (m_initialized) {
 		return TT_FrameTimeStamp();
 	}
@@ -96,37 +72,33 @@ int Motive::getNumberofMarkers() const {
 	return 0;
 }
 
-int Motive::getNumberOfCameras() const
-{
+int Motive::getNumberOfCameras() const {
 	if (m_initialized) {
 		return TT_CameraCount();
 	}
 	return 0;
 }
 
-int Motive::getNumberOfRigidBodies() const
-{
+int Motive::getNumberOfRigidBodies() const {
 	if (m_initialized) {
-		return TT_RigidBodyCount();
+		return TT_TrackableCount();
 	}
 	return 0;
 }
 
-std::string Motive::getNameOfCamera(int index) const
-{
+std::string Motive::getNameOfCamera(int id) const {
 	if (m_initialized) {
-		if (index <= TT_CameraCount()) {
-			return std::string(TT_CameraName(index));
+		if (id <= TT_CameraCount()) {
+			return std::string(TT_CameraName(id));
 		}
 	}
 	return std::string("");
 }
 
-std::string Motive::getNameOfRigidBody(int index) const
-{
+std::string Motive::getNameOfRigidBody(int id) const {
 	if (m_initialized) {
-		if (index <= TT_RigidBodyCount()) {
-			return std::string(TT_RigidBodyName(index));
+		if (id <= TT_TrackableCount()) {
+			return std::string(TT_TrackableName(id));
 		}
 	}
 	return std::string("");
@@ -134,17 +106,12 @@ std::string Motive::getNameOfRigidBody(int index) const
 
 bool Motive::isRigidBodyTracked(int index) const
 {
-	return TT_IsRigidBodyTracked(index);
+	return TT_IsTrackableTracked(index);
 }
 
 int Motive::getRigidBodyID(int index) const
 {
-	return TT_RigidBodyUserData(index);
-}
-
-void Motive::setRigidBodyID(int index, int ID)
-{
-	return TT_SetRigidBodyUserData(index, ID);
+	return TT_TrackableID(index);
 }
 
 bool Motive::update()
@@ -164,7 +131,7 @@ bool Motive::updateSingleFrame()
 void Motive::getPositionAndOrientation(int index, float& x, float& y, float& z, float& qx, float& qy, float& qz, float& qw, float& yaw, float& pitch, float& roll) const
 {
 	if (m_initialized) {
-		TT_RigidBodyLocation(index, &x, &y, &z, &qx, &qy, &qz, &qw, &yaw, &pitch, &roll);
+		TT_TrackableLocation(index, &x, &y, &z, &qx, &qy, &qz, &qw, &yaw, &pitch, &roll);
 	}
 }
 

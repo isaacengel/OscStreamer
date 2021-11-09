@@ -11,8 +11,8 @@
 #include "osc/OscOutboundPacketStream.h"
 #include "ip/UdpSocket.h"
 
-#define OSC_MESSAGE_ADDRESS         "/transformation"
-#define DEFAULT_OSC_CLIENT_IP       "192.168.1.255"
+#define OSC_MESSAGE_ADDRESS         "/Tracker/GetCurrentValues/0" // "/transformation"
+#define DEFAULT_OSC_CLIENT_IP       "127.0.0.1" // "192.168.1.255"
 #define DEFAULT_OSC_CLIENT_PORT     3000
 #define OUTPUT_BUFFER_SIZE          1024
 
@@ -35,7 +35,7 @@ public:
     ~OscStreamer();
     void init();
 	void send(int x);
-    void send( int ID, int isTracked, float x, float y, float z, float qx, float qy, float qz, float qw);
+    void send( int ID, int isTracked, float x, float y, float z, float qx, float qy, float qz, float qw, float yaw, float pitch, float roll, int ncameras);
 	const char *getClientIP();
 	int getClientPort();
 };

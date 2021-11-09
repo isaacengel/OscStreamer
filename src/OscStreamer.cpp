@@ -49,14 +49,13 @@ void OscStreamer::send(int x)
 	this->transmitSocket->Send(p.Data(), p.Size());
 }
 
-void OscStreamer::send( int ID, int isTracked, float x, float y, float z, float qx, float qy, float qz, float qw)
+void OscStreamer::send( int ID, int isTracked, float x, float y, float z, float qx, float qy, float qz, float qw, float yaw, float pitch, float roll, int ncameras)
 {
     char buffer[OUTPUT_BUFFER_SIZE];
     osc::OutboundPacketStream p( buffer, OUTPUT_BUFFER_SIZE );
 
     p << osc::BeginMessage(OSC_MESSAGE_ADDRESS);
-    p << ID;
-    p << isTracked << x << y << z << qx << qy << qz << qw;
+    p << ID << isTracked << x*100 << y*100 << z*100 << yaw << pitch << roll << qx << qy << qz << qw << ncameras;
     p << osc::EndMessage;
 
     this->transmitSocket->Send( p.Data(), p.Size() );
